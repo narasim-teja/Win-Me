@@ -20,41 +20,19 @@ export function Scene() {
   const [cameraPosition, setCameraPosition] = useState([-6, 3.9, 6.21]);
   const [points, setPoints] = useState(0); // Initialize points state
   const [coins, setCoins] = useState([
-    [-4.5, 0.01, 2],
-    [-5.5, 0.01, 3],
-    [-2.5, 0.01, -4],
-    [2.5, 0.01, -4],
-    [-1, 0.7,0]
+    [-4.5, 0.09, 2],
+    [-4.5, 0.09, 0],
+    [0.5, 0.09, -0.1],
+    [-5.5, 0.09, 3],
+    [-2.5, 0.09, -4],
+    [2.5, 0.09, -4],
+    [1.5, 0.09, 2],
+    [-6.5, 0.09, -4],
+    [-1, 0.6,0],
+    [-1.5, 0.09, 1.9],
+    [-5.3, 0.09, 1],
 
   ]);
-
-
-
-
-  // // Function to generate coin positions in a circular pattern
-  // const generateCircularCoinPositions = () => {
-  //   const numCoins = 10; // Adjust the number of coins as needed
-  //   const circleRadius = 5; // Radius of the circular pattern
-
-  //   const coinPositions = [];
-
-  //   for (let i = 0; i < numCoins; i++) {
-  //     const angle = (i / numCoins) * Math.PI * 2; // Distribute coins evenly around the circle
-  //     const x = circleRadius * Math.cos(angle);
-  //     const z = circleRadius * Math.sin(angle);
-  //     const y = 0.01; // Adjust the height of the coins as needed
-
-  //     coinPositions.push([x, y, z]);
-  //   }
-
-  //   return coinPositions;
-  // };
-
-  // // Generate coin positions in a circular pattern when the component mounts
-  // useMemo(() => {
-  //   const newCoins = generateCircularCoinPositions();
-  //   setCoins(newCoins);
-  // }, []);
 
   // Function to handle picking up a coin
   const handlePickup = (index) => {
@@ -67,6 +45,8 @@ export function Scene() {
     // Check if the player has collected enough coins
     
   };
+
+  
 
   useEffect(() => {
     function keydownHandler(e) {
