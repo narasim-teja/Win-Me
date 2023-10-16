@@ -55,7 +55,7 @@ export function Ground() {
         position={[-2.285, -0.01, -1.325]}
         rotation-x={-Math.PI * 0.5}
       >
-        <planeGeometry args={[24, 24]} /> // Increase the area 12,12
+        <planeGeometry args={[12, 12]} /> // Increase the area 12,12
         <meshBasicMaterial
           opacity={0.325}
           alphaMap={gridMap}
