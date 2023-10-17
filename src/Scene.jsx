@@ -148,7 +148,7 @@ export function Scene() {
 
   ]);
   const [userInputs, dispatch] = useReducer(userInputReducer, []);
-  const [frameCount, setFrameCount] = useState(0);
+  const frameCountRef = useRef(0); // Use ref to store the frame count
   const [startLineVisible, setStartLineVisible] = useState(true);
 
   // Function to handle picking up a coin
@@ -172,14 +172,14 @@ export function Scene() {
   const handleKeyDown = (e) => {
     dispatch({
       type: "KEY_DOWN",
-      input: { key: e.key, type: "keydown", frame: frameCount },
+      input: { key: e.key, type: "keydown", frame: frameCountRef.current },
     });
   };
 
   const handleKeyUp = (e) => {
     dispatch({
       type: "KEY_UP",
-      input: { key: e.key, type: "keyup", frame: frameCount },
+      input: { key: e.key, type: "keyup", frame: frameCountRef.current },
     });
   };
 
@@ -188,6 +188,7 @@ export function Scene() {
       if (e.key === "k") {
         if (thirdPerson) {
           setCameraPosition([-6, 4.9, 6.21 + Math.random() * 0.01]);
+          
         }
         setThirdPerson(!thirdPerson);
       }
@@ -214,11 +215,10 @@ export function Scene() {
   }, [thirdPerson, userInputs]);
 
   
+ 
 
   // useFrame(() => {
-  
-  //   setFrameCount((prevFrameCount) => prevFrameCount + 1);
-    
+  //   frameCountRef.current += 1;
   // });
 
   const targetFrameRate = 30; // Set your desired frame rate (60fps)
@@ -232,7 +232,7 @@ export function Scene() {
     if (deltaTime >= targetFrameInterval) {
       previousTimestamp = timestamp;
 
-      setFrameCount((prevFrameCount) => prevFrameCount + 1);
+       frameCountRef.current += 1;
     }
 
     requestAnimationFrame(animate);
@@ -244,8 +244,6 @@ export function Scene() {
     };
     startAnimation();
   }, []);
- 
-
 
 
   return (
