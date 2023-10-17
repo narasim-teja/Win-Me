@@ -113,6 +113,8 @@ import { Coin } from "./Coin";
 import "./index.css";
 import { Perf } from "r3f-perf";
 import { useFrame } from "@react-three/fiber";
+import { FinishLine } from "./FinishLine";
+import { StartLine } from "./StartLine";
 
 // Reducer function to handle user inputs
 const userInputReducer = (state, action) => {
@@ -147,6 +149,7 @@ export function Scene() {
   ]);
   const [userInputs, dispatch] = useReducer(userInputReducer, []);
   const [frameCount, setFrameCount] = useState(0);
+  const [startLineVisible, setStartLineVisible] = useState(true);
 
   // Function to handle picking up a coin
   const handlePickup = (index) => {
@@ -158,6 +161,12 @@ export function Scene() {
     // console.log("inside function")
     // Check if the player has collected enough coins
     
+  };
+
+  // Function to handle the start line pickup
+  const handleStartLinePickup = () => {
+    // Update the visibility of the start line when it's picked up
+    setStartLineVisible(false);
   };
 
   const handleKeyDown = (e) => {
@@ -228,6 +237,8 @@ export function Scene() {
 
       <Ground />
       <Track />
+      { (points >=3 ) && <FinishLine scale={0.1} position={[-1,0.7,0]} rotation-y={Math.PI} />}
+      <StartLine scale={0.003} position={[-1,0,-1]} onPickup={handleStartLinePickup} />
  
       <Car thirdPerson={thirdPerson} />
 

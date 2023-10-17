@@ -1,8 +1,7 @@
-import { Sphere } from "@react-three/drei";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { useRef } from "react";
 
-import { Vector3, TextureLoader, CylinderGeometry } from "three";
+import { Vector3, TextureLoader} from "three";
 
 import { useCarPosition } from './CarPositionContext'
 
@@ -23,6 +22,7 @@ useFrame((state,delta) => {
     coin.rotation.y += 0.1 * delta; // Rotate around the X-axis
     coin.rotation.z += 0.1 * delta; // Rotate around the Z-axis
     const coinPosition = new Vector3(position[0], position[1], position[2]);
+    
 
     // Calculate the distance between the car and the coin using the context
     const distance = Math.sqrt(
