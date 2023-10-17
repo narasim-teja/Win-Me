@@ -11,7 +11,7 @@ import { useCarPosition } from "./CarPositionContext";
 
 
 export function Car({ thirdPerson}) {
-  const { updateCarPosition } = useCarPosition();
+  const { updateCarPosition } = useCarPosition()
   
  
  
