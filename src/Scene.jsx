@@ -215,11 +215,35 @@ export function Scene() {
 
   
 
-  useFrame(() => {
+  // useFrame(() => {
   
-    setFrameCount((prevFrameCount) => prevFrameCount + 1);
+  //   setFrameCount((prevFrameCount) => prevFrameCount + 1);
     
-  });
+  // });
+
+  const targetFrameRate = 30; // Set your desired frame rate (60fps)
+  let previousTimestamp = 0;
+
+
+  function animate(timestamp) {
+    const deltaTime = timestamp - previousTimestamp;
+    const targetFrameInterval = 1000 / targetFrameRate;
+
+    if (deltaTime >= targetFrameInterval) {
+      previousTimestamp = timestamp;
+
+      setFrameCount((prevFrameCount) => prevFrameCount + 1);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  useEffect(() => {
+    const startAnimation = () => {
+      requestAnimationFrame(animate);
+    };
+    startAnimation();
+  }, []);
  
 
 
