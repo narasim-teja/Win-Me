@@ -26,7 +26,7 @@ export function FinishLine(props) {
     );
     
 
-    const pickupThreshold = 0.2;
+    const pickupThreshold = 0.4;
 
     if (distance < pickupThreshold) {
         // console.log("inside if loop")

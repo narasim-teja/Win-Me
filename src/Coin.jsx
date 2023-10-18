@@ -5,7 +5,7 @@ import { Vector3, TextureLoader} from "three";
 
 import { useCarPosition } from './CarPositionContext'
 
-export function Coin({ position, onPickup }) {
+export function Coin({ position, onPickup, index, currentCoinIndex }) {
   const coinRef = useRef();
   const { carPosition } = useCarPosition();
 
@@ -39,6 +39,21 @@ useFrame((state,delta) => {
       onPickup();
       coin.visible = false;
     }
+
+    // Check if this coin is the current collectible coin
+    const isCollectible = index === currentCoinIndex;
+
+    if (isCollectible) {
+      coin.visible = true;
+      // Check if the car is close enough to collect the coin
+      if (distance < pickupThreshold) {
+        onPickup();
+        coin.visible = false;
+      }
+    } else {
+      coin.visible = false;
+    }
+  
   });
 
   return (

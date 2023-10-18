@@ -135,36 +135,48 @@ export function Scene() {
   const [cameraPosition, setCameraPosition] = useState([-6, 3.9, 6.21]);
   const [points, setPoints] = useState(0); // Initialize points state
   const [coins, setCoins] = useState([
-    [-4.5, 0.09, 2],
-    [-4.5, 0.09, 0],
-    [0.5, 0.09, -0.1],
-    [-5.5, 0.09, 3],
-    [-2.5, 0.09, -4],
-    [2.5, 0.09, -4],
-    [1.5, 0.09, 2],
-    [-6.5, 0.09, -4],
-    [-1, 0.6,0],
-    [-1.5, 0.09, 1.9],
-    [-5.3, 0.09, 1],
-
+    [0.5, 0.09, -0.1],//2
+    [0.5, 0.09, -0.1],//2
+    [-4.5, 0.09, 0], // 4
+    [-4.5, 0.09, 0], // 4
+    [-5.3, 0.09, 1],// 5
+    [-5.3, 0.09, 1],// 5
+    [-4.5, 0.09, 1.5], // 6
+    [-4.5, 0.09, 1.5], // 6
+    [-1.5, 0.09, 1.9], // 7
+    [-1.5, 0.09, 1.9], // 7
+    [-1, 0.6,0], // Ramp
+    [-1, 0.6,0], // Ramp
+    [-5.5, 0.09, 3], // OOT bottom left
+    [-5.5, 0.09, 3], // OOT bottom left
+    [-2.5, 0.09, -4], // OOT behind the stairs
+    [-2.5, 0.09, -4], // OOT behind the stairs
+    [2.5, 0.09, -4], // OOT top Right
+    [2.5, 0.09, -4], // OOT top Right
+    [-6.5, 0.09, -4], // OOT Top Left
+    [-6.5, 0.09, -4], // OOT Top Left
   ]);
   const [userInputs, dispatch] = useReducer(userInputReducer, []);
   const frameCountRef = useRef(0); // Use ref to store the frame count
   const [startLineVisible, setStartLineVisible] = useState(true);
   const [finishLineVisible, setFinishLineVisible] = useState(true);
+  const [currentCoinIndex, setCurrentCoinIndex] = useState(0);
   const navigate = useNavigate();
 
 
   // Function to handle picking up a coin
   const handlePickup = (index) => {
+    if(index == currentCoinIndex) {
     // Update the points and remove the picked-up coin
     setPoints(points + 1);
     const updatedCoins = [...coins];
     updatedCoins.splice(index, 1);
     setCoins(updatedCoins);
     // console.log("inside function")
-    // Check if the player has collected enough coins
-    
+
+    // Show the next collectible coin
+    setCurrentCoinIndex(currentCoinIndex + 1);
+    }
   };
 
   // Function to handle the start line pickup
@@ -178,12 +190,12 @@ export function Scene() {
     // Update the visibility of the start line when it's picked up
     setFinishLineVisible(false);
 
-    console.log("userInputs array:", userInputs);
+    console.log("userInputs array:", points);
 
     // Pass data as props and navigate to the leaderboard route
     navigate("/leaderBoard", {
       state: {
-        userInputsArray: userInputs,
+        points: points,
       },
     });
   };
@@ -278,7 +290,7 @@ export function Scene() {
 
       <Ground />
       <Track />
-      { (points >=3 ) && <FinishLine scale={0.1} position={[-1,0.7,0]} rotation-y={Math.PI} onPickup={handleFinishLinePickup} />}
+      {  (!startLineVisible) && (points >=8 ) && <FinishLine scale={0.1} position={[-1,0.7,0]} rotation-y={Math.PI} onPickup={handleFinishLinePickup} />}
       <StartLine scale={0.003} position={[-1,0,-1]} onPickup={handleStartLinePickup} />
  
       <Car thirdPerson={thirdPerson} />
@@ -293,7 +305,8 @@ export function Scene() {
           key={index}
           position={position}
           onPickup={() => handlePickup(index)}
-          // Pass the car ref to the Coin component
+          index={index}
+          currentCoinIndex={currentCoinIndex}
         />
       ))}
     </Suspense>
