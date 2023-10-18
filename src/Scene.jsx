@@ -115,6 +115,7 @@ import { Perf } from "r3f-perf";
 import { useFrame } from "@react-three/fiber";
 import { FinishLine } from "./FinishLine";
 import { StartLine } from "./StartLine";
+import { useNavigate } from 'react-router-dom';
 
 // Reducer function to handle user inputs
 const userInputReducer = (state, action) => {
@@ -150,6 +151,9 @@ export function Scene() {
   const [userInputs, dispatch] = useReducer(userInputReducer, []);
   const frameCountRef = useRef(0); // Use ref to store the frame count
   const [startLineVisible, setStartLineVisible] = useState(true);
+  const [finishLineVisible, setFinishLineVisible] = useState(true);
+  const navigate = useNavigate();
+
 
   // Function to handle picking up a coin
   const handlePickup = (index) => {
@@ -167,6 +171,21 @@ export function Scene() {
   const handleStartLinePickup = () => {
     // Update the visibility of the start line when it's picked up
     setStartLineVisible(false);
+  };
+
+  // Function to handle the start line pickup
+  const handleFinishLinePickup = () => {
+    // Update the visibility of the start line when it's picked up
+    setFinishLineVisible(false);
+
+    console.log("userInputs array:", userInputs);
+
+    // Pass data as props and navigate to the leaderboard route
+    navigate("/leaderBoard", {
+      state: {
+        userInputsArray: userInputs,
+      },
+    });
   };
 
   const handleKeyDown = (e) => {
@@ -259,7 +278,7 @@ export function Scene() {
 
       <Ground />
       <Track />
-      { (points >=3 ) && <FinishLine scale={0.1} position={[-1,0.7,0]} rotation-y={Math.PI} />}
+      { (points >=3 ) && <FinishLine scale={0.1} position={[-1,0.7,0]} rotation-y={Math.PI} onPickup={handleFinishLinePickup} />}
       <StartLine scale={0.003} position={[-1,0,-1]} onPickup={handleStartLinePickup} />
  
       <Car thirdPerson={thirdPerson} />
