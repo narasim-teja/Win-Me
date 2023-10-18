@@ -161,6 +161,7 @@ export function Scene() {
   const [startLineVisible, setStartLineVisible] = useState(true);
   const [finishLineVisible, setFinishLineVisible] = useState(true);
   const [currentCoinIndex, setCurrentCoinIndex] = useState(0);
+  const [finishLineFrame, setFinishLineFrame] = useState(null);
   const navigate = useNavigate();
 
 
@@ -190,12 +191,16 @@ export function Scene() {
     // Update the visibility of the start line when it's picked up
     setFinishLineVisible(false);
 
-    console.log("userInputs array:", points);
+    // Set the frame number when the finish line is crossed
+    setFinishLineFrame(frameCountRef.current);
+
+    console.log("Score:", points);
 
     // Pass data as props and navigate to the leaderboard route
     navigate("/leaderBoard", {
       state: {
         points: points,
+        finishLineFrame: frameCountRef.current, // Pass the frame number
       },
     });
   };

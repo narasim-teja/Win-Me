@@ -1,0 +1,34 @@
+/* leaderboard.css */
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .leaderboard-table th,
+  .leaderboard-table td {
+    border: 1px solid #d467df;
+    padding: 8px;
+    text-align: center;
+    color: #172526;
+  }
+  
+  .leaderboard-table th {
+    background-color: #0ed1e0;
+  }
+  
+  .leaderboard-table tr:nth-child(even) {
+    background-color: #dcc0fa;
+  }
+  
+  .leaderBoard-container{
+    background-image: url('./Assests/bg_leader.jpeg'); /* Replace with your image file path or URL */
+    height: 100%;
+    margin-top: -1.4rem;
+  }
+
+  .leaderBoard-container h1 {
+    text-align: center;
+    padding: 2rem;
+  }
