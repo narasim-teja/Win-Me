@@ -5,7 +5,7 @@ const CarPositionContext = createContext();
 export const useCarPosition = () => useContext(CarPositionContext);
 
 export const CarPositionProvider = ({ children }) => {
-  const [carPosition, setCarPosition] = useState({ x: 0, y:0, z: 0 }); // Initialize with the initial position of the car
+  const [carPosition, setCarPosition] = useState({ x: -1, y:0, z: -0.2 }); // Initialize with the initial position of the car
 
   const updateCarPosition = (newPosition) => {
     setCarPosition(newPosition);
