@@ -21,7 +21,7 @@ const App = () => {
           
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/buy" element={<Buy />} />
+            {/* <Route path="/buy" element={<Buy />} /> */}
             
 
             <Route path="/leaderBoard" element={<LeaderBoard/> } />
@@ -34,10 +34,10 @@ const App = () => {
             />
     
             {/* Render Select component and provide the callback */}
-            <Route
+            {/* <Route
               path="/import"
               element={<Select onFileUpload={handleImportedData} />}
-            />
+            /> */}
           </Routes>
         </>
       );

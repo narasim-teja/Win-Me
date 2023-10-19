@@ -1,34 +1,65 @@
 /* leaderboard.css */
 
 .leaderboard-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .leaderboard-table th,
-  .leaderboard-table td {
-    border: 1px solid #d467df;
-    padding: 8px;
-    text-align: center;
-    color: #172526;
-  }
-  
-  .leaderboard-table th {
-    background-color: #0ed1e0;
-  }
-  
-  .leaderboard-table tr:nth-child(even) {
-    background-color: #dcc0fa;
-  }
-  
-  .leaderBoard-container{
-    background-image: url('./Assests/bg_leader.jpeg'); /* Replace with your image file path or URL */
-    height: 100%;
-    margin-top: -1.4rem;
-  }
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
 
-  .leaderBoard-container h1 {
-    text-align: center;
-    padding: 2rem;
-  }
+.leaderboard-table th {
+  border: 1px solid #065c63;
+  padding: 8px;
+  text-align: center;
+  color: #3b1b1b;
+}
+.leaderboard-table td {
+  border: 1px solid #065c63;
+  padding: 8px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.leaderboard-table th {
+  background-color: #0ed1e0;
+}
+
+.leaderboard-table tr:nth-child(even) {
+  background-color: #d467df;
+}
+
+.leaderboard-table tr:nth-child(odd) {
+  background-color: #a296da;
+}
+
+.leaderBoard-container {
+  background-image: url('./Assests/bg_leader.jpeg'); /* Replace with your image file path or URL */
+  height: 150%;
+  margin-top: -1.4rem;
+  color: #ffffff; /* Text color for white background */
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.leaderBoard-container h1 {
+  text-align: left;
+  padding: 2rem;
+  font-size: 32px;
+  font-weight: bold;
+  align-self: flex-start; /* Align to the left */
+  color: #172526;
+}
+
+.leaderBoard-container img {
+  width: 200px; /* Adjust the width as needed */
+  height: auto; /* Maintain aspect ratio */
+  align-self: flex-end; /* Align to the right */
+  margin-top: -5rem; /* Add some spacing between <h1> and <img> */
+}
+
+.leaderBoard-container p {
+  text-align: center;
+  font-size: 20px;
+  margin-top: 20px;
+}

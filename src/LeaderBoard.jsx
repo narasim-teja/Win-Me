@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './leaderBoard.css';
+import trophyImage from './Assests/winner.png';
 
 function getLeaderboardData() {
   return JSON.parse(localStorage.getItem('leaderboard')) || [];
@@ -58,12 +59,16 @@ const LeaderBoard = () => {
   return (
     <div className='leaderBoard-container' >
       <h1>Leaderboard</h1>
+      <div>
+        <img src={trophyImage} alt="Trophy" />
+      </div>
+      <p>Winner gets this and ...Coins</p>
       <table className="leaderboard-table">
         <thead>
           <tr>
             <th>Rank</th>
             <th>Wallet Address</th>
-            <th>Points</th>
+            <th>Coins</th>
             <th>Time</th>
           </tr>
         </thead>
