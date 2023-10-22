@@ -52,7 +52,7 @@ Prepare for a gas fee-free gaming adventure!
 
 
 ## Full Video link
-`https://www.youtube.com/watch?v=JCkKVNrm1TA`
+https://www.youtube.com/watch?v=JCkKVNrm1TA
 
 
 
