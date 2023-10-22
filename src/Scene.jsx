@@ -116,6 +116,7 @@ import { useFrame } from "@react-three/fiber";
 import { FinishLine } from "./FinishLine";
 import { StartLine } from "./StartLine";
 import { useNavigate } from 'react-router-dom';
+import Billboards from "./Billboards";
 
 // Reducer function to handle user inputs
 const userInputReducer = (state, action) => {
@@ -286,7 +287,7 @@ export function Scene() {
     <Suspense fallback={null}>
       <Perf/>
       <Environment
-        files={process.env.PUBLIC_URL + "/textures/envmap.hdr"}
+        files={process.env.PUBLIC_URL + "/textures/stadium.hdr"}
         background={"both"}
       />
 
@@ -303,6 +304,8 @@ export function Scene() {
       <Html>
         <div className="points-display">Coins: {points}</div>
       </Html>
+
+      <Billboards/>
 
 
       {coins.map((position, index) => (
