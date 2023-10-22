@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal'; // Import the Modal component
+import {NFT_CONTRACT_ADDRESS,TOKEN_CONTRACT_ADDRESS} from './constants/addresses'
 
 // Import background image
 import backgroundImage from './Assests/fbg.jpeg'; // Replace with your image file
+import { ConnectWallet, ThirdwebNftMedia,  Web3Button,  useAddress, useContract, useNFT, useOwnedNFTs, useTokenBalance } from '@thirdweb-dev/react';
+import LeaderBoard from './LeaderBoard'
+
 
 // Styled components for styling
 const HomeContainer = styled.div`
@@ -41,11 +45,11 @@ const Button = styled.button`
   border-radius: 4px;
   padding: 10px 20px;
   cursor: pointer;
+  margin: 1rem
 `;
 
 const Home = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -54,15 +58,85 @@ const Home = () => {
     setModalIsOpen(false);
   };
 
+  const [tokenBalanceDisplay, setTokenBalanceDisplay] = useState("0")
+  const [ userLoggedIn, setUserLoggedIn] = useState(false)
+  
+  const address = useAddress()
+  console.log(address)
+
+  const {contract: nftContract} = useContract(NFT_CONTRACT_ADDRESS)
+  const {contract: tokenContract} = useContract(TOKEN_CONTRACT_ADDRESS)
+  
+
+  const {
+    data: ownedNFTs,
+    isLoading: isLoadingOwnedNFTs,
+  } = useOwnedNFTs(nftContract, address)
+  
+
+  const {
+    data: tokenBalance,
+    isLoading: isLoadingTokenBalance
+  } = useTokenBalance(tokenContract, address)
+
+  const {
+    data: nft,
+    isLoading: isLoadingNFT
+  } = useNFT(nftContract, 0)
+
+  useEffect(() => {
+    if(!address) return
+    if(!tokenContract) return
+
+    const interval = setInterval(async() => {
+      const tokenBalance = await tokenContract.erc20.balanceOf(address)
+      setTokenBalanceDisplay(tokenBalance.displayValue)
+    }, 5000)
+
+    setUserLoggedIn(true)
+    
+
+
+  },[address, userLoggedIn])
+
+  
+
+  
+
   return (
     <HomeContainer>
       <CardContainer>
         <Card>
-          <Link to='/play-me'>
-            <h1>Start a new game</h1>
-          </Link>
-          {/* Add Start a new game related content here */}
+
+        <ConnectWallet 
+            theme={"light"}
+            btnTitle={"Login"}
+            modalTitle={"Select a Wallet"}
+            modalSize={"compact"}
+            modalTitleIconUrl={""} 
+            dropdownPosition={{
+              side: "left", //  "top" | "bottom" | "left" | "right";
+              align: "end", // "start" | "center" | "end";
+            }}
+          />
+
+          {userLoggedIn && (
+            <Link to='/play-me' style={{ textDecoration: 'none'}} >
+              <h1>Start a new game</h1>
+            </Link>
+          
+            
+          )}
+          
+
+          
+         
+          
           <Button onClick={openModal}>Rules</Button>
+          {userLoggedIn && (
+            <Button > <Link to="/leaderBoard" style={{ textDecoration: 'none'}} >LeaderBoard</Link> </Button>
+          )}
+          
           <Modal
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
