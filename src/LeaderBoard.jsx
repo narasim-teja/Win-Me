@@ -1,9 +1,11 @@
-
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './leaderBoard.css';
 import { Link } from 'react-router-dom';
 import trophyImage from './Assests/winner.png';
+
+import { collection, getDocs , addDoc, updateDoc} from "firebase/firestore";
+import {db} from './config/firestore.js'
 
 
 import {NFT_CONTRACT_ADDRESS,TOKEN_CONTRACT_ADDRESS} from './constants/addresses'
@@ -11,36 +13,64 @@ import {NFT_CONTRACT_ADDRESS,TOKEN_CONTRACT_ADDRESS} from './constants/addresses
 import { ConnectWallet, ThirdwebNftMedia,  Web3Button,  useAddress, useContract, useNFT, useOwnedNFTs, useTokenBalance, walletConnect } from '@thirdweb-dev/react';
 
 
-
-function getLeaderboardData() {
-  return JSON.parse(localStorage.getItem('leaderboard')) || [];
-}
-
 const LeaderBoard = () => {
   const location = useLocation();
   const { state } = location;
+  const [leaderBoardData,setLeaderBoardData] =  useState()
+  console.log(leaderBoardData)
   const [isDataAdded, setDataAdded] = useState(false); // Track if data has been added
   const [userAddress, setUserAddress] = useState(null); // Store the user's address
   const [winnerClaimed, setWinnerClaimed] = useState(true); 
   const address = useAddress()
-  console.log(address)
-  const [continueClicked, setContinueClicked] = useState(false); // Track if the "Continue" button has been clicked
+  // console.log(address)
+
+
+  // FireBase
+
   
 
+  // Fetch leaderboard data from Firebase
+  const getLeaderboardDataFromFirestore = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "Leaderboard"));
+      const leaderboardData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-     // Retrieve winnerClaimed from local storage on component mount
-  useEffect(() => {
-    const storedWinnerClaimed = localStorage.getItem('winnerClaimed');
-    if (storedWinnerClaimed !== null) {
-      setWinnerClaimed(storedWinnerClaimed === 'true');
+      // Sort the leaderboard data in ascending order based on 'finishLineFrame'
+      leaderboardData.sort((a, b) => a.finishLineFrame - b.finishLineFrame);
+      
+      setLeaderBoardData(leaderboardData);
+    } catch (error) {
+      console.error('Error fetching leaderboard data from Firestore', error);
     }
+  };
+
+  const addDataToFirestore = async (data) => {
+    try {
+      // Reference to the Firestore collection
+      const leaderboardCollection = collection(db, "Leaderboard");
+  
+      // Add a new document with the data
+      const docRef = await addDoc(leaderboardCollection, data);
+  
+      console.log("Document added with ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+  
+
+  useEffect(() => {
+    getLeaderboardDataFromFirestore();
   }, []);
 
-  // Function to set winnerClaimed and store it in local storage
-  const setAndStoreWinnerClaimed = (value) => {
-    setWinnerClaimed(value);
-    localStorage.setItem('winnerClaimed', value.toString());
+
+  const setAndStoreWinnerClaimed = async () => {
+    // Check if the NFT has already been claimed
+   
+
   };
+  
+  
 
 
   // ThirdWeb
@@ -97,90 +127,50 @@ const LeaderBoard = () => {
 
   useEffect(() => {
     if(!userAddress) return
+    // Check if the user's data already exists in the leaderboard
+  if (leaderBoardData) {
+    const userEntry = leaderBoardData.find((entry) => entry.Wallet_Address === userAddress);
+
+    if (userEntry) {
+      // User's data already exists, no need to add it again
+      return;
+    }
+  }
     if (isDataAdded) {
       return; // Data has already been added, do not proceed
     }
 
     if (state && state.points && state.finishLineFrame) {
       const { points, finishLineFrame } = state;
-      const seconds = (finishLineFrame + 259) / 30;
-      const minutes = Math.floor(seconds / 60);
-      const remainingSeconds = seconds % 60;
+      const seconds = ((finishLineFrame +100 ) / 30).toFixed(2);
+      // const minutes = Math.floor(seconds / 60);
+      // const remainingSeconds = (seconds % 60).toFixed(2); // Use toFixed to display two decimal places
+
+      // // Format the time as "X min Y.YY sec" or "Y.YY sec" if there are no minutes
+      // const time = minutes > 0 ? `${minutes} min ${remainingSeconds} sec` : `${remainingSeconds} sec`;
       
 
       const newEntry = {
-        walletAddress: userAddress, // Set the wallet address if available
-        points: points,
-        time: `${minutes > 0 ? `${minutes} min ` : ''}${remainingSeconds.toFixed(2)} sec`,
+        Wallet_Address: userAddress, // Set the wallet address if available
+        Coins: points,
+        Time: seconds,
         finishLineFrame: finishLineFrame,
-        
+        winnerClaimed: true
       };
       
 
-      const leaderboardData = getLeaderboardData();
-
-      // Check for duplicates based on a unique identifier
-      const isDuplicate = leaderboardData.some((entry) => {
-        return (
-          entry.points === newEntry.points &&
-          entry.finishLineFrame === newEntry.finishLineFrame
-        );
-      });
-
-      if (!isDuplicate) {
-        leaderboardData.push(newEntry);
-        localStorage.setItem('leaderboard', JSON.stringify(leaderboardData));
+     
+        addDataToFirestore(newEntry);
         setDataAdded(true); // Mark data as added
       }
-    }
-  }, [isDataAdded, state, userAddress]);
-
- 
-
-  const storedLeaderboardData = getLeaderboardData().sort(
-    (a, b) => a.finishLineFrame - b.finishLineFrame
-  );
-
-  storedLeaderboardData.forEach((entry, index) => {
-    entry.rank = index + 1;
-  });
-
-
-  // Function to handle "Continue" button click
-  const handleContinueClick = () => {
-    setContinueClicked(true);
     
-  };
-  
+  }, [isDataAdded, state, userAddress,leaderBoardData]);
 
-  
+
 
   return (
     <div className='leaderBoard-container' >
-        {!continueClicked ? (
-        <div className="splash-screen">
-          <h1 onClick={handleContinueClick} >Welcome to the LeaderBoard!</h1>
-          <Web3Button 
-                contractAddress={TOKEN_CONTRACT_ADDRESS}
-                action={async (contract) => {
-                  // You can use state.points here to specify the number of tokens to claim
-                  // You may need to format it according to your contract's requirements
-                  setContinueClicked(true);
-                  const pointsToClaim = state.points;
-                  
-                  // Example: Convert points to a string if needed
-                  const pointsToClaimString = pointsToClaim.toString();
-                  
-                  await contract.erc20.claim(pointsToClaimString);
-
-                  
-              
-              
-                }}                
-               >Continue</Web3Button>
-        </div>
-      ) : (
-        <>
+        
       <div className='Profile' >
        <div className='profile-header'>
           <Link to="/" style={{ textDecoration: 'none', marginRight: '10px' }} ><h2>Your Profile</h2></Link>
@@ -195,7 +185,28 @@ const LeaderBoard = () => {
             <>
             <h3 className='me'>Welcome Back :<span> { truncateAddress(address)}</span></h3>
               {!isLoadingTokenBalance && (
+                <>
                 <h1>APE Coins: {tokenBalanceDisplay}</h1>
+                <Web3Button 
+                contractAddress={TOKEN_CONTRACT_ADDRESS}
+                action={async (contract) => {
+                  // You can use state.points here to specify the number of tokens to claim
+                  // You may need to format it according to your contract's requirements
+                  
+                  const pointsToClaim = state.points;
+                  
+                  // Example: Convert points to a string if needed
+                  const pointsToClaimString = pointsToClaim.toString();
+                  
+                  await contract.erc20.claim(pointsToClaimString);
+
+                  
+              
+              
+                }}                
+                >Claim Your Coins</Web3Button>
+                </>
+                
               )}
               
               
@@ -226,24 +237,23 @@ const LeaderBoard = () => {
           {!isLoadingTokenBalance && (<ThirdwebNftMedia metadata={nft.metadata} />)}
         </div>
         <p>Winner Can Claim</p>
-        {address &&  (
+        {address && leaderBoardData  && leaderBoardData.length > 0 && (
           <>
-            {storedLeaderboardData.length > 0 && storedLeaderboardData[0].walletAddress === userAddress && (
-            <Web3Button
-              contractAddress={NFT_CONTRACT_ADDRESS}
-              action={(contract) => contract.erc721.claim(1)}
-              onSuccess={() => {
-                alert("NFT claimed")
-                setAndStoreWinnerClaimed(false);
-              }}
-              
-            >
-              Claim NFT
-            </Web3Button>
-          )}
-        </>
-        
-      )}
+            {leaderBoardData[0].Wallet_Address === userAddress  && (
+              <Web3Button
+                contractAddress={NFT_CONTRACT_ADDRESS}
+                action={(contract) => contract.erc721.claim(1)}
+                onSuccess={() => {
+                  alert("NFT claimed");
+                  setAndStoreWinnerClaimed(false);
+                }}
+              >
+                Claim NFT
+              </Web3Button>
+            )}
+          </>
+        )}
+
         </>
         
       ) : (
@@ -258,23 +268,23 @@ const LeaderBoard = () => {
             <th>Rank</th>
             <th>Wallet Address</th>
             <th>Coins</th>
-            <th>Time</th>
+            <th>Time(Seconds)</th>
           </tr>
         </thead>
         <tbody>
-          {storedLeaderboardData.map((entry, index) => (
+          {leaderBoardData && leaderBoardData.map((entry, index) => (
             <tr key={index} > 
-              <td>{entry.rank}</td>
-              <td>{entry.walletAddress}</td>
-              <td>{entry.points}</td>
-              <td>{entry.time}</td>
+              <td>{index +1}</td>
+              <td>{entry.Wallet_Address}</td>
+              <td>{entry.Coins}</td>
+              <td>{entry.Time}</td>
             </tr>
           ))}
         </tbody>
       </table>
       </div>
-      </>
-    )}
+      
+    
     </div>
   );
 };

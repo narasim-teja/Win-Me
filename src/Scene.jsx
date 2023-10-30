@@ -296,7 +296,7 @@ export function Scene() {
 
       <Ground />
       <Track />
-      {  (!startLineVisible) && (points >=8 ) && <FinishLine scale={0.1} position={[-1,0.7,0]} rotation-y={Math.PI} onPickup={handleFinishLinePickup} />}
+      {  (!startLineVisible) && (points >=3 ) && <FinishLine scale={0.1} position={[-1,0.7,0]} rotation-y={Math.PI} onPickup={handleFinishLinePickup} />}
       <StartLine scale={0.003} position={[-1,0,-1]} onPickup={handleStartLinePickup} />
  
       <Car thirdPerson={thirdPerson} />
