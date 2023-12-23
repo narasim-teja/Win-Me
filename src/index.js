@@ -13,6 +13,7 @@ import {
  } from "@thirdweb-dev/react";
  import { ScrollSepoliaTestnet,PolygonZkevmTestnet,MantleTestnet } from "@thirdweb-dev/chains";
 import App from './App';
+import { Analytics } from '@vercel/analytics/react';
 
 
 const smartWalletOptions = {
@@ -47,6 +48,7 @@ root.render(
    >
       <BrowserRouter>
          <App />
+         <Analytics />
       </BrowserRouter>
    </ThirdwebProvider>
     
