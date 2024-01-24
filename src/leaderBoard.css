@@ -81,8 +81,8 @@
 
 .leaderBoard-container {
   background-image: url('./Assests/bg_leader.jpeg'); /* Replace with your image file path or URL */
-  height: 830px;
-  margin-top: -1.4rem;
+  height: 100% ;
+  
   color: #d87f7f; /* Text color for white background */
   font-family: Arial, sans-serif;
   
