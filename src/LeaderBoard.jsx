@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import trophyImage from './Assests/winner.png';
 
 import { collection, getDocs , addDoc, updateDoc} from "firebase/firestore";
+import moment from 'moment-timezone';
 import {db} from './config/firestore.js'
 
 
@@ -124,6 +125,9 @@ const LeaderBoard = () => {
     }
   }, [address, userAddress]);
 
+  // Set the desired timezone (e.g., 'America/New_York')
+const desiredTimezone = 'America/New_York';
+
 
   useEffect(() => {
     if(!userAddress) return
@@ -143,6 +147,8 @@ const LeaderBoard = () => {
     if (state && state.points && state.finishLineFrame) {
       const { points, finishLineFrame } = state;
       const seconds = ((finishLineFrame +100 ) / 30).toFixed(2);
+      // Get the current date and time in the desired timezone
+      const currentTime = moment().tz(desiredTimezone).format();
       // const minutes = Math.floor(seconds / 60);
       // const remainingSeconds = (seconds % 60).toFixed(2); // Use toFixed to display two decimal places
 
@@ -155,7 +161,8 @@ const LeaderBoard = () => {
         Coins: points,
         Time: seconds,
         finishLineFrame: finishLineFrame,
-        winnerClaimed: true
+        winnerClaimed: true,
+        Timestamp: currentTime,
       };
       
 

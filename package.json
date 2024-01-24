@@ -23,6 +23,7 @@
     "https": "npm:https-browserify",
     "https-browserify": "latest",
     "leva": "^0.9.35",
+    "moment-timezone": "^0.5.44",
     "postcss": "^8.4.31",
     "r3f-perf": "^7.1.2",
     "react": "^18.2.0",
