@@ -9,12 +9,14 @@ import moment from 'moment-timezone';
 import {db} from './config/firestore.js'
 
 
+
 import {NFT_CONTRACT_ADDRESS,TOKEN_CONTRACT_ADDRESS} from './constants/addresses'
 
 import { ConnectWallet, ThirdwebNftMedia,  Web3Button,  useAddress, useContract, useNFT, useOwnedNFTs, useTokenBalance, walletConnect } from '@thirdweb-dev/react';
 
 
 const LeaderBoard = () => {
+  
   const location = useLocation();
   const { state } = location;
   const [leaderBoardData,setLeaderBoardData] =  useState()
@@ -23,11 +25,12 @@ const LeaderBoard = () => {
   const [userAddress, setUserAddress] = useState(null); // Store the user's address
   const [winnerClaimed, setWinnerClaimed] = useState(true); 
   const address = useAddress()
+ 
   // console.log(address)
 
 
   // FireBase
-
+  
   
 
   // Fetch leaderboard data from Firebase
@@ -173,6 +176,10 @@ const desiredTimezone = 'America/New_York';
     
   }, [isDataAdded, state, userAddress,leaderBoardData]);
 
+  async function handleERC20() {
+    
+  }
+
 
 
   return (
@@ -194,26 +201,9 @@ const desiredTimezone = 'America/New_York';
               {!isLoadingTokenBalance && (
                 <>
                 <h1>APE Coins: {tokenBalanceDisplay}</h1>
-                <Web3Button 
-                contractAddress={TOKEN_CONTRACT_ADDRESS}
-                action={async (contract) => {
-                  // You can use state.points here to specify the number of tokens to claim
-                  // You may need to format it according to your contract's requirements
-                  
-                  const pointsToClaim = state.points;
-                  
-                  // Example: Convert points to a string if needed
-                  const pointsToClaimString = pointsToClaim.toString();
-                  
-                  await contract.erc20.claim(pointsToClaimString);
-
-                  
-              
-              
-                }}                
-                >Claim Your Coins</Web3Button>
+                <button onClick={handleERC20} >Claim
+                </button>
                 </>
-                
               )}
               
               

@@ -5,6 +5,9 @@ import PlayMe from "./PlayMe";
 import Buy from "./Buy";
 import Select from "./Select";
 import LeaderBoard from "./LeaderBoard";
+import Profile from "./Profile";
+import Marketplace from "./Marketplace";
+import LobbyPage from "./LobbyPage";
 
 const App = () => {
     const [importedData, setImportedData] = useState(null);
@@ -25,6 +28,9 @@ const App = () => {
             
 
             <Route path="/leaderBoard" element={<LeaderBoard/> } />
+            <Route path="/profile" element={<Profile/> } />
+            <Route path="/marketplace" element={<Marketplace/> } />
+            <Route path="/lobby" element={<LobbyPage/> } />
             
     
             {/* Pass imported data to PlayMe */}

@@ -120,21 +120,25 @@ const Home = () => {
             }}
           />
 
-          {userLoggedIn && (
-            <Link to='/play-me' style={{ textDecoration: 'none'}} >
-              <h1>Start a new game</h1>
-            </Link>
+        
+            
           
             
-          )}
+          
           
 
           
          
           
           <Button onClick={openModal}>Rules</Button>
-          {userLoggedIn && (
+          {address && (
             <Button > <Link to="/leaderBoard" style={{ textDecoration: 'none'}} >LeaderBoard</Link> </Button>
+          )}
+          {address && (
+            <Button > <Link to="/profile" style={{ textDecoration: 'none'}} >Profile</Link> </Button>
+          )}
+          {address && (
+            <Button > <Link to="/marketplace" style={{ textDecoration: 'none'}} >Marketplace</Link> </Button>
           )}
           
           <Modal

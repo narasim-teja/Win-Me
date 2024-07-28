@@ -11,13 +11,13 @@ import {
    smartWallet,
    paperWallet
  } from "@thirdweb-dev/react";
- import { ScrollSepoliaTestnet,PolygonZkevmTestnet,MantleTestnet } from "@thirdweb-dev/chains";
+ import { MoonbaseAlpha } from "@thirdweb-dev/chains";
 import App from './App';
-import { Analytics } from '@vercel/analytics/react';
+
 
 
 const smartWalletOptions = {
-   factoryAddress: "0xd4ff4462A6B3875F4FCaa19023Ada8152Bca3F3d",
+   factoryAddress: "0x021dD2C12627f9Be8F02E590a4C15f4ED4ae0be0",
    gasless: true,
  };
 
@@ -25,30 +25,22 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
  <React.StrictMode>
    <ThirdwebProvider 
-      clientId="b3941fee4a204bc9393eb658a8c8fb7b"
-      activeChain="mumbai"
+      activeChain={MoonbaseAlpha}
+      clientId="cea330060d59c6b9dc7a5f81615bbc25"
       supportedWallets={[
-         smartWallet(
-           metamaskWallet(),
-           smartWalletOptions,
-         ),
-         smartWallet(
-           coinbaseWallet(),
-           smartWalletOptions,
-         ),
-         smartWallet(
-           walletConnect(),
-           smartWalletOptions,
-         ),
-         smartWallet(
-           embeddedWallet(),
-           smartWalletOptions,
-         ),
-       ]}
+        smartWallet(embeddedWallet(), {
+          factoryAddress: "0x021dD2C12627f9Be8F02E590a4C15f4ED4ae0be0",
+          gasless: true,
+        }),
+        metamaskWallet()
+          
+      ]}
+      
+      
    >
       <BrowserRouter>
          <App />
-         <Analytics />
+         
       </BrowserRouter>
    </ThirdwebProvider>
     
